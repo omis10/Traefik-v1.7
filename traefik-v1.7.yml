@@ -9,7 +9,7 @@ services:
       --docker.watch \
       --logLevel=DEBUG
     networks:
-      - traefik-net
+      - traefik-network
     ports:
       - "80:80"
       - "8080:8080"
@@ -24,27 +24,27 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
-      - traefik-net
+      - traefik-network
     deploy:
       placement:
         constraints: [node.role == manager]
       labels:
         - "traefik.enable=true"
         - "traefik.port=9000"
-        - "traefik.docker.network=mystack_traefik-net"
+        - "traefik.docker.network=mystack_traefik-network"
         - "traefik.frontend.rule=Host:portainer.omis.com"
   whoami:
     image: containous/whoami
     networks:
-      - traefik-net
+      - traefik-network
     deploy:
       replicas: 3
       labels:
         - "traefik.enable=true"
         - "traefik.port=80"
-        - "traefik.docker.network=mystack_traefik-net"
+        - "traefik.docker.network=mystack_traefik-network"
         - "traefik.frontend.rule=Host:whoami.omis.com"
 
 networks:
-  traefik-net:
+  traefik-network:
     driver: overlay
